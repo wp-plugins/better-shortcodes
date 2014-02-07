@@ -41,6 +41,7 @@ On demo days, most definitely.
 1. Settings Screen from Wordpress Admin.
 2. Ordering Shortcodes.
 3. Selecting shortcode using TinyMCE.
+4. Selected text wrapped in a theme shortcode!
 
 == Changelog ==
 
