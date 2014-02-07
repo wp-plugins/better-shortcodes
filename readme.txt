@@ -1,4 +1,4 @@
-=== Super Simple Twitter Feed ===
+=== Better Shortcodes for TinyMCE ===
 Contributors: designedbw 
 Tags: Shortcodes, short code, tinymce, wysiwyg
 Requires at least: 3.8
