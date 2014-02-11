@@ -1,6 +1,6 @@
 === Better Shortcodes for TinyMCE ===
 Contributors: designedbw 
-Tags: Shortcode, short code, tinymce, wysiwyg
+Tags: Shortcode, tinymce, wysiwyg
 Requires at least: 3.8
 Tested up to: 3.8.1
 Stable tag: 1.1
