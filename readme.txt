@@ -63,6 +63,3 @@ On demo days, most definitely.
 
 = 1.2 =
 CSS fix for Chrome Browser (removes extra arrow in admin area)
-
-= 1.1 =
-New version allows you to create more complex shortcodes with variable values. You can now choose NOT to auto close a shortcode tag.
