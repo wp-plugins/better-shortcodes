@@ -1,9 +1,9 @@
 === Better Shortcodes for TinyMCE ===
 Contributors: designedbw 
 Tags: Shortcodes, short code, tinymce, wysiwyg
-Requires at least: 3.8
-Tested up to: 3.8.1
-Stable tag: 1.2
+Requires at least: 3.9
+Tested up to: 3.9.1
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
