@@ -50,7 +50,7 @@ On demo days, most definitely.
 
 == Changelog ==
 
-= 1.3 =
+= 1.4 =
 * Removed the Export Link in the admin menu - not quite there yet!
 
 = 1.3 =
