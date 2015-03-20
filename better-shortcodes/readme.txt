@@ -1,9 +1,9 @@
-=== Super Simple Twitter Feed ===
+=== Better Shortcodes for TinyMCE ===
 Contributors: designedbw 
 Tags: Shortcodes, short code, tinymce, wysiwyg
-Requires at least: 3.8
-Tested up to: 3.8.1
-Stable tag: 1.0
+Requires at least: 4.1
+Tested up to: 4.1.1
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,8 +41,11 @@ On demo days, most definitely.
 1. Settings Screen from Wordpress Admin.
 2. Ordering Shortcodes.
 3. Selecting shortcode using TinyMCE.
+4. Selected text wrapped in a theme shortcode!
 
 == Changelog ==
 
 = 1.0 =
 * First release
+
+== Upgrade Notice ==
