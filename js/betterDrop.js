@@ -1,50 +1,45 @@
 (function() {
-	tinymce.create('tinymce.plugins.shortcodedrop', {
-		init          : function(ed, url) {},
-		createControl : function(n, cm) {
-			if(n=='shortcodedrop'){
-				var mlb = cm.createListBox('shortcodedrop', {
-										title    : listTitle,
-										onselect : function(v) {
-																var open = '[';
-																var close = ']';
-																var openclose = '[/';
-																if(tinyMCE.activeEditor.selection.getContent() == ''){
-																	tinyMCE.activeEditor.selection.setContent( open + v + close + openclose + v + close );
-																}
-																else {
-																	tinyMCE.activeEditor.selection.setContent(open + v + close + tinyMCE.activeEditor.selection.getContent() + openclose + v + close);
-																}
-																
-									}
-		}
-		);
+	tinymce.PluginManager.add('shortcodedrop', function(editor,url){
+		var mlb = {};
+		editor.addButton('shortcodedrop', {
+			type    		: 'listbox',
+			text				: listTitle,
+			icon				: false,
+			fixedWidth  : true,
+			onclick     : function(){editor.focus();},//Set Focus of the current editor
+			onselect : function(){
 
-			for (var i = 0; i<btslb_shortcodes.length; i++) {
-				var obj = btslb_shortcodes[i];
-					for (var key in obj) {
-							mlb.add(key,obj[key]);							
-					}				
-			}	
-			return mlb;	
-		}	 
-		return null;
-		}
+				var v = this.value();
+				var clean_code   = decodeURI(v.substring(0,v.length-2));
+				var close_code   = clean_code;
+				var space = '';
+				if((space = clean_code.indexOf(' '))>0){
+					close_code = clean_code.substring(0,space); //get only the name of the shortcode to close it properly
+				}
+				var close_option = parseInt(v.substring(v.length - 1, v.length));
+				
+				var open = '[';
+				var close = ']';
+				var openclose = '[/';
+				
+				if(tinymce.activeEditor.selection.getContent() == ''){ //no content to wrap
+					if(!close_option){ // auto close tag
+						tinymce.activeEditor.selection.setContent( open + clean_code + close + openclose + close_code + close );
+					}
+					else {
+						tinymce.activeEditor.selection.setContent( open + clean_code + close );
+					}
+				}
+				else {// possibly wrap content
+					if(!close_option){ //auto close tag - wrap content
+						tinymce.activeEditor.selection.setContent(open + clean_code + close + tinyMCE.activeEditor.selection.getContent() + openclose + close_code + close);
+					}
+					else { // do not close tag - place content at end (just in case)
+						tinymce.activeEditor.selection.setContent(open + clean_code + close + tinyMCE.activeEditor.selection.getContent());
+					}																		
+				}
+			},
+			values: btslb_shortcodes
+	 });
 	});
-	if(btslb_shortcodes.length){
-		tinymce.PluginManager.add('shortcodedrop', tinymce.plugins.shortcodedrop);
-	}
-	/*
-	 * ensure editor focus is set
-	 */
-	jQuery(".wp-editor-container").on("click","table[id*='shortcodedrop']",function(){
-		jQuery(this).closest("tr.mceFirst").next("tr").children("td").children("iframe").focus();
-	});
-	/*
-	 * simple fields plugin (or multiple tinymce editors)
-	 */
-	jQuery(".wp-editor-container").on("click","table[class*='shortcodedrop']",function(){
-		jQuery(this).closest("tr.mceFirst").next("tr").children("td").children("iframe").focus();
-	});	
-
 })();

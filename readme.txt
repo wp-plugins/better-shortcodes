@@ -1,13 +1,13 @@
-=== Super Simple Twitter Feed ===
+=== Better Shortcodes for TinyMCE ===
 Contributors: designedbw 
-Tags: Shortcodes, short code, tinymce, wysiwyg
-Requires at least: 3.8
-Tested up to: 3.8.1
-Stable tag: 1.0
+Tags: Shortcode, tinymce, wysiwyg
+Requires at least: 4.1.1
+Tested up to: 4.1.1
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Makes inserting basic theming shortocodes easy for users who don't want to remember any code!
+Makes inserting shortocodes easier for users who don't want to remember any code!
 
 == Description ==
 
@@ -28,6 +28,10 @@ we hate remembering those shortcodes too!
 
 == Frequently Asked Questions ==
 
+= Does this work with the latest version of the tinyMCE editor? =
+
+It sure does!
+
 = Can you easily order the list if you need to make changes or additons later? =
 
 Why Yes, yes you can.
@@ -41,8 +45,36 @@ On demo days, most definitely.
 1. Settings Screen from Wordpress Admin.
 2. Ordering Shortcodes.
 3. Selecting shortcode using TinyMCE.
+4. Selected text wrapped in a theme shortcode!
+5. Selected a Complex Shortcode
 
 == Changelog ==
 
+= 2.0 =
+* Initial Installation bug fix (would not allow creation of shortcodes)
+* Only tested on Version 4.1.1
+
+= 1.4 =
+* Removed the Export Link in the admin menu - not quite there yet!
+
+= 1.3 =
+* Rewrote the plugin code for the new tinyMCE 4.0 level editor
+
+= 1.2 =
+* CSS fix for Chrome Browser (removes extra arrow in admin area)
+
+= 1.1 =
+* Added option to not close tag
+* Allow for more complicated Shortcodes with variable values
+* Added `Help` section to the Admin Page
+* Included JavaScript on edit and create pages only
+* Minor CSS fixes for the Admin Page
+
 = 1.0 =
 * First release
+
+== Upgrade Notice ==
+
+= 2.0 =
+* Initial Installation bug fix (would not allow creation of shortcodes)
+* Only tested on Version 4.1.1

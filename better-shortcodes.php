@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Better Tinymce Shortcodes List
-Plugin URI: http://www.betterweatherinc.com
+Plugin URI: http://www.betterweatherllc.com
 Description: Create a shortcodes list for shortcodes in the tinymce toolbar
-Author: Betterweather Inc.
-Version: 1.0
-Author URI: http://www.betterweatherinc.com/
+Author: Betterweather LLC
+Version: 2.1
+Author URI: http://www.betterweatherllc.com/
 */
-/*  Copyright 2013  Betterweather Inc.  (email : designed@betterweatherinc.com)
+/*  Copyright 2014-2015  Betterweather Inc.  (email : designed@betterweatherllc.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -29,8 +29,8 @@ Author URI: http://www.betterweatherinc.com/
 	function btslb_versioncheck(){
 		global $wp_version;
 		
-		if(!version_compare($wp_version, "3.6", ">=")){
-			die('You must have at least Wordpress Version 3.6 or greater to use the Better Tinymce ShortCode List plugin!');	
+		if(!version_compare($wp_version, "4.1", ">=")){
+			die('You must have at least Wordpress Version 3.9 or greater to use the Better Tinymce ShortCode List plugin!');	
 		}
 	}
 	register_activation_hook(__FILE__, "btslb_versioncheck");
@@ -54,9 +54,11 @@ Author URI: http://www.betterweatherinc.com/
 	register_uninstall_hook(plugins_url('/better-shortcodes/uninstall.php'), "btslb_uninstall");
 /*
  * Place JS in the Admin Head
- */	
+ */
+ if(is_admin()&&($pagenow=='post-new.php' OR $pagenow=='post.php')){
 	add_action('admin_head', 'better_shortcodes_in_js');
 	add_action('admin_head', 'better_tinymce');
+ }
 
 /*
  * Pass Options and Variables to betterDrop.js
@@ -79,14 +81,25 @@ Author URI: http://www.betterweatherinc.com/
 	var btslb_shortcodes = <?php echo html_entity_decode($shortcodes); ?>;
 	</script>
 <?php
-}
 
 /*
  * Make Drop Down List Work
  */
 	function better_tinymce() {
-		add_filter('mce_external_plugins', 'better_tinymce_plugin');
-		add_filter('mce_buttons', 'better_tinymce_button');
+    global $typenow;
+    // check user permissions
+    if (!current_user_can('edit_posts') && !current_user_can('edit_pages')) {
+   		return;
+    }		
+    // verify the post type
+    if(!in_array($typenow, array( 'post', 'page' ))){
+        return;
+		}
+		// check if WYSIWYG is enabled
+		if (get_user_option('rich_editing') == 'true') {		
+			add_filter('mce_external_plugins', 'better_tinymce_plugin');
+			add_filter('mce_buttons', 'better_tinymce_button');//mce_buttons_2 - mce_buttons_4 - if you need it on another row
+		}
 	}
 	 
 	function better_tinymce_plugin($plugin_array) {
@@ -98,6 +111,7 @@ Author URI: http://www.betterweatherinc.com/
 		array_push($buttons, 'shortcodedrop');
 		return $buttons;
 	}
+}//end better_shortcodes_in_js
 
 /*
  * Admin Section
@@ -130,35 +144,60 @@ Author URI: http://www.betterweatherinc.com/
 	function btslb_option_page(){
 		?>
 		<div class="wrap">
-			<?php screen_icon(); ?>
 			<h2>Better Tinymce ShortCode List Options</h2>	
 			<p>Here you can set or edit the fields needed for the plugin.</p>
+			<div class="examples">
+				<a href="javascript:void(0)" id="ex" class="button-secondary">Help</a>
+				<ul>
+					<li>1. <strong>Title for Shortcode:</strong> Any title you want to give the list.</li>
+					<li>2. <strong>Add Shortcode</strong> Click this button to add another Shortcode to the list.</li>
+					<li>3. <strong>Friendly Name:</strong> This text will appear in the drop down list and should describe the shortcode.</li>
+					<li>4. <strong>Shortcode:</strong> Create the shortcode as needed
+						<ul>
+							<li><strong>one_half</strong> &mdash; will produce: <strong>[one_half][/one_half]</strong></li>
+							<li><p class="description">Note: you should <u><strong>NOT</strong></u> use brackets - [ ]</p></li>
+						</ul>
+					</li>
+					<li>5. <strong>Do Not Auto Close:</strong> Check this box if you want to create a shortcode that does NOT require a closing tag
+						<ul>
+							<li>Checked: <strong>gallery id="1" size="medium"</strong> &mdash; will produce: <strong>[gallery id="1" size="medium"]</strong></li>
+							<li>Unchecked: <strong>gallery id="1" size="medium"</strong> &mdash; will produce: <strong>[gallery id="1" size="medium"][/gallery]</strong></li>
+						</ul>
+					</li>
+					<li>6. Remove any unwanted Shortcode with the "Remove" button.</li>
+					<li>7. Drag to reorder any of the Shortcodes with the exception of the first Shortcode (default)</li>
+				</ul>
+			</div>
 			<form action="options.php" method="post" id="btslb-options-form">
 			<?php settings_fields('btslb_options'); ?>
 				<table class="form-table">
 					<tr class="even ui-state-disabled" valign="top">
-						<th scope="row"><label for="btslb_listTitle">The Title for the Short Code List: </label></th>				
+						<th scope="row"><label for="btslb_listTitle">Short Code List Title: </label></th>				
 						<td>
-							<input type="text" id="btslb_listTitle" name="btslb_listTitle" class="medium-text" value="<?php echo esc_attr(get_option('btslb_listTitle')); ?>" />
+							<input type="text" id="btslb_listTitle" name="btslb_listTitle" class="medium-text" placeholder="Shortcode" value="<?php echo esc_attr(get_option('btslb_listTitle')); ?>" />
 							<p class="description">(Default is "Shortcode")</p>
 						</td>
 					</tr>
 					<tr class="even ui-state-disabled" valign="top">
 						<th scope="row"><label></label></th>				
 						<td>
-							<a href="" id="addCode">Add Another Short Code</a>						
+							<!--just spacing out-->					
 						</td>
 					</tr>
 					<tr class="even ui-state-disabled" valign="top">
-						<th scope="row"><label for="tmp_btslb_freindly">Short Code(s): </label></th>				
+						<th scope="row"><label for="tmp_btslb_freindly">Shortcode(s): </label></th>				
 						<td>
 							<input type="text" id="tmp_btslb_friendly" name="tmp_btslb_friendly" class="medium-text friendly btslb_n btslb_n_1 btslb-filter" placeholder="Friendly Name"/>
-							<input type="text" id="tmp_btslb_shortcodes" name="btslb_shortcodes" class="regular-text shortcode btslb_c btslb_c_1 btslb-filter nospace" placeholder="Short Code"/>							
+							<input type="text" id="tmp_btslb_shortcodes" name="btslb_shortcodes" class="regular-text shortcode btslb_c btslb_c_1 btslb-filter nospace" placeholder="Shortcode"/>
+							<label for="tmp_btslb_do_not_close" class="btslb_checkbox"><input id="tmp_btslb_do_not_close" name="tmp_btslb_do_not_close" type="checkbox" value="1" class="btslb_d btslb_d_1">Do Not Auto Close</label>							
 						</td>
 					</tr>
 				</table>
 				<input type="hidden" id="btslb_shortcodes" name="btslb_shortcodes" value="<?php echo esc_attr(get_option('btslb_shortcodes')); ?>" /> 		
-				<p class="submit"><input type="submit" id="btslb-submit" name="submit" class="button-primary" value="Save Settings" /></p>			
+				<p class="submit">
+					<input type="submit" id="btslb-submit" name="submit" class="button-primary" value="Save Settings" />
+					<a href="javascript:void(0)" id="addCode" class="button-primary" style="margin-left:5px;">Add Another Shortcode</a>	
+				</p>			
 			</form>
 		</div>		
 		<?php
@@ -170,6 +209,7 @@ Author URI: http://www.betterweatherinc.com/
 	function btslb_plugin_menu(){
 		$btlsb_page = add_options_page('Better Tinymce Shortcodes Settings','Shortcodes','manage_options','btslb-plugin','btslb_option_page');
 		add_action('load-'.$btlsb_page, 'load_btslb_admin_scripts');
+		//add_submenu_page('options-general.php','Export','Export','activate_plugins','shortcode-export-option','shortcode_export_option_page');
 		
 	}
 	
