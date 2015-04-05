@@ -48,7 +48,7 @@ On certain days, most definitely.
 
 == Changelog ==
 
-= 2.2 =
+= 2.3 =
 * Removed Default Post and Page restriction Now works with Custom Post Types
 
 = 2.2 =
@@ -85,5 +85,5 @@ On certain days, most definitely.
 
 == Upgrade Notice ==
 
-= 2.2 =
+= 2.3 =
 * Removed Default Post and Page restriction Now works with Custom Post Types
